@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
       title: 'Akaboozi ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.blueAccent,
+        bottomAppBarColor: Colors.blueAccent,
+        backgroundColor:Colors.blueAccent,
       ),
       home: const AuthScreen(),
     );

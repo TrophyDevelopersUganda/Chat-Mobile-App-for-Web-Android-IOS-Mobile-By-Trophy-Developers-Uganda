@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-const AuthForm(this.submitFn, bool isLoading, {Key? key}) : super(key: key);
+  const AuthForm(
+    this.submitFn,
+    this.isLoading, {Key? key}) : super(key: key);
+
+  final bool isLoading;
   final void Function(
     String email,
-    String userName,
     String password,
+    String userName,
     bool isLogin,
-      BuildContext ctx,
+    BuildContext ctx,
   ) submitFn;
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -15,16 +19,22 @@ const AuthForm(this.submitFn, bool isLoading, {Key? key}) : super(key: key);
 
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLogin = true;
-  String _userEmail = '';
-  String _userName = '';
-  String _userPassword = '';
+  var _isLogin = true;
+  var _userEmail = '';
+  var _userName = '';
+  var _userPassword = '';
   void _trySubmit() {
     final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus();
     if (isValid!) {
       _formKey.currentState?.save();
-      widget.submitFn(_userEmail.trim().toLowerCase(), _userName.trim().toLowerCase(), _userPassword.trim(), _isLogin, context,);
+      widget.submitFn(
+        _userEmail.trim().toLowerCase(),
+        _userPassword.trim(),
+        _userName.trim().toLowerCase(),
+        _isLogin,
+        context,
+      );
 
       //use those value to send to our auth request ....
     }
@@ -34,6 +44,7 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
+        color: Colors.white,
         margin: const EdgeInsets.all(2),
         child: SingleChildScrollView(
             clipBehavior: Clip.hardEdge,
@@ -62,7 +73,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     if (!_isLogin)
                       TextFormField(
-                        key: const ValueKey('userName'),
+                        key: const ValueKey('username'),
                         onSaved: (value) {
                           _userName = value!;
                         },
@@ -93,14 +104,17 @@ class _AuthFormState extends State<AuthForm> {
                       obscureText: true,
                       decoration: const InputDecoration(labelText: 'Password'),
                     ),
-                    SizedBox(
-                        child: ElevatedButton(
+                    const SizedBox(height: 12),
+                    if (widget.isLoading)
+                    const CircularProgressIndicator(),
+                    if (!widget.isLoading)
+                    ElevatedButton(
                       // style:ButtonStyle: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20, )),
                       child: Text(_isLogin
                           ? 'Login Now'
                           : 'Sign Up Instead, I am New here'),
                       onPressed: _trySubmit,
-                    )),
+                    ),
                     TextButton(
                       child: Text(_isLogin
                           ? 'Sign Up Now'
