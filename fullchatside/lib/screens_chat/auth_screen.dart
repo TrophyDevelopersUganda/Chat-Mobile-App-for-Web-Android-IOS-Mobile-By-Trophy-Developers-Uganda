@@ -17,9 +17,11 @@ class _AuthScreenState extends State<AuthScreen> {
   var _isLoading = false;
 
   void _submitAuthForm(
+    
     String email,
     String password,
     String username,
+    String role,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -41,7 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .collection('users')
             .doc(authResult.user!.uid)
             .set({'username':username,'email':email, 
-            //  'password': password,  
+       'role': role,  
              });
       }
     } on PlatformException catch (err) {
@@ -72,11 +74,13 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:  Colors.blue,
-      body: AuthForm(
-        _submitAuthForm,
-        _isLoading,
+    return SafeArea(  bottom: false,
+      child: Scaffold(   
+        backgroundColor:  Colors.blue,
+        body: AuthForm(
+          _submitAuthForm,
+          _isLoading,
+        ),
       ),
     );
   }

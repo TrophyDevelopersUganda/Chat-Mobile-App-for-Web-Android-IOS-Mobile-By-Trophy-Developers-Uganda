@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm(
-    this.submitFn,
-    this.isLoading, {Key? key}) : super(key: key);
+  const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
   final bool isLoading;
   final void Function(
     String email,
     String password,
     String userName,
+    String role,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
@@ -23,6 +22,7 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
+  var _role = "";
   void _trySubmit() {
     final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus();
@@ -32,6 +32,7 @@ class _AuthFormState extends State<AuthForm> {
         _userEmail.trim().toLowerCase(),
         _userPassword.trim(),
         _userName.trim().toLowerCase(),
+        _role.trim(),
         _isLogin,
         context,
       );
@@ -88,6 +89,22 @@ class _AuthFormState extends State<AuthForm> {
                           }
                         },
                       ),
+                            TextFormField(
+                        key: const ValueKey('role'),
+                        onSaved: (value) {
+                          _role = value!;
+                        },
+                        decoration:
+                            const InputDecoration(labelText: 'Teacher/Student/Admin'),
+                        validator: (value) {
+                          if (value!.isEmpty || value.length == 7 || value.length == 4  ) {
+                            return 'Must be Teacher or Student or Admin';
+                          }
+                          {
+                            return null;
+                          }
+                        },
+                      ),
                     TextFormField(
                       key: const ValueKey('password'),
                       validator: (value) {
@@ -105,16 +122,15 @@ class _AuthFormState extends State<AuthForm> {
                       decoration: const InputDecoration(labelText: 'Password'),
                     ),
                     const SizedBox(height: 12),
-                    if (widget.isLoading)
-                    const CircularProgressIndicator(),
+                    if (widget.isLoading) const CircularProgressIndicator(),
                     if (!widget.isLoading)
-                    ElevatedButton(
-                      // style:ButtonStyle: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20, )),
-                      child: Text(_isLogin
-                          ? 'Login Now'
-                          : 'Sign Up Instead, I am New here'),
-                      onPressed: _trySubmit,
-                    ),
+                      ElevatedButton(
+                        // style:ButtonStyle: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20, )),
+                        child: Text(_isLogin
+                            ? 'Login Now'
+                            : 'Sign Up Instead, I am New here'),
+                        onPressed: _trySubmit,
+                      ),
                     TextButton(
                       child: Text(_isLogin
                           ? 'Sign Up Now'
