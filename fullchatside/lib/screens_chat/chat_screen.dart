@@ -1,6 +1,5 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:fullchatside/widgets/chats/messages.dart';
 import 'package:fullchatside/widgets/chats/new_message.dart';
@@ -36,8 +35,8 @@ class ChatScreen extends StatelessWidget {
           ],
         )
       ]),
-      body: Container( margin:  EdgeInsets.only(top: 8),padding: EdgeInsets.all(9),
-        child: Column(children:  const [
+      body: Container( margin:  const EdgeInsets.only(top: 8),padding: const EdgeInsets.all(9),
+        child: Column(children:   const [
           Expanded(child: Messages()),
         NewMessage(),
         ],),
@@ -53,7 +52,6 @@ class ChatScreen extends StatelessWidget {
       //         child: CircularProgressIndicator(),
       //       );
       //     }
-
       //     return ListView.builder(
       //       itemCount: snapshot.data?.docs.length,
       //       itemBuilder: (context, index) => Container(
