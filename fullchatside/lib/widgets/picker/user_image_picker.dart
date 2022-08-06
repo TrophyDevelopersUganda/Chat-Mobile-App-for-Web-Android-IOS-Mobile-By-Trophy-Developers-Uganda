@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserImagePicker extends StatefulWidget {
-  const UserImagePicker({Key? key}) : super(key: key);
-
+  const UserImagePicker(
+    this.imagePickFn, {
+    Key? key,
+  }) : super(key: key);
+  final void Function(File pickedImage) imagePickFn;
   @override
   State<UserImagePicker> createState() => _UserImagePickerState();
 }
@@ -26,6 +29,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
       imagePicked = pickedImageFile;
     });
     Navigator.pop(context);
+    widget.imagePickFn(pickedImageFile);
   }
 
   void gallaryImage() async {
@@ -38,85 +42,78 @@ class _UserImagePickerState extends State<UserImagePicker> {
       imagePicked = pickedImageFile;
     });
     Navigator.pop(context);
+    widget.imagePickFn(pickedImageFile);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.all(2),
+        CircleAvatar(
+          radius: 71,
+          backgroundColor: Colors.black,
           child: CircleAvatar(
-            radius: 71,
-            backgroundColor: Colors.black,
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 69,
-              backgroundImage: imagePicked == null
-                  ? null
-                  : FileImage(
-                      imagePicked!,
-                    ),
-            ),
+            backgroundColor: Colors.white,
+            radius: 69,
+            backgroundImage: imagePicked == null
+                ? null
+                : FileImage(
+                    imagePicked!,
+                  ),
+            child: const Text("Upload to Set Profile "),
           ),
         ),
         Positioned(
-          left: 50,
-          top: 40,
-          // bottom: 3,
-          child: Row(
-            children: [
-              RawMaterialButton(
-                fillColor: Theme.of(context).backgroundColor,
-                padding: const EdgeInsets.all(10),
-                shape: const CircleBorder(),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text(
-                          'Choose Option',
-                        ),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextButton.icon(
-                                onPressed: cameraImage,
-                                label: const Text(
-                                  'Go to my Camera',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                icon: const Icon(
-                                  Icons.camera,
-                                ),
-                              ),
-                              TextButton.icon(
-                                onPressed: gallaryImage,
-                                label: const Text(
-                                  'Go to My Gallery',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                icon: const Icon(Icons.image),
-                              ),
-                            ],
+          right: 390,
+          top: 290,
+          // bottom: 43,
+          child: RawMaterialButton(
+            fillColor: Theme.of(context).backgroundColor,
+            padding: const EdgeInsets.all(10),
+            shape: const CircleBorder(),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text(
+                      'Choose Option',
+                    ),
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextButton.icon(
+                          onPressed: cameraImage,
+                          label: const Text(
+                            'Go to my Camera',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.camera,
                           ),
                         ),
-                      );
-                    },
+                        TextButton.icon(
+                          onPressed: gallaryImage,
+                          label: const Text(
+                            'Go to My Gallery',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          icon: const Icon(Icons.image),
+                        ),
+                      ],
+                    ),
                   );
                 },
-                child: const Icon(
-                  Icons.add_a_photo,
-                  size: 48,
-                ),
-              ),
-            ],
+              );
+            },
+            child: const Icon(
+              Icons.add_a_photo,
+              // size: 48,
+            ),
           ),
         ),
       ],

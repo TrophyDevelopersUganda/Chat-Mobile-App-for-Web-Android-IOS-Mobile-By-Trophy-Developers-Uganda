@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fullchatside/widgets/picker/user_image_picker.dart';
 
@@ -10,6 +12,7 @@ class AuthForm extends StatefulWidget {
     String password,
     String userName,
     String role,
+    File image,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
@@ -24,9 +27,23 @@ class _AuthFormState extends State<AuthForm> {
   var _userName = '';
   var _userPassword = '';
   var _role = "";
+  File? _userImageFile;
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
+  }
+
   void _trySubmit() {
     final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus();
+    // ignore: unnecessary_null_comparison
+    if (_userImageFile == null && !_isLogin) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Pick an Image Please, to successfull signup'),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+      return;
+    }
     if (isValid!) {
       _formKey.currentState?.save();
       widget.submitFn(
@@ -34,6 +51,7 @@ class _AuthFormState extends State<AuthForm> {
         _userPassword.trim(),
         _userName.trim().toLowerCase(),
         _role.trim(),
+        _userImageFile!,
         _isLogin,
         context,
       );
@@ -44,11 +62,8 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-   
-  children: <Widget>[
-   
-     Card(
+    return Stack(children: <Widget>[
+      Card(
         color: Colors.white,
         margin: const EdgeInsets.all(2),
         child: SingleChildScrollView(
@@ -59,9 +74,7 @@ class _AuthFormState extends State<AuthForm> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                  const UserImagePicker(),
-                  
-                    
+                    if (!_isLogin) UserImagePicker(_pickedImage),
                     TextFormField(
                       key: const ValueKey('email'),
                       validator: (value) {
@@ -96,24 +109,23 @@ class _AuthFormState extends State<AuthForm> {
                           }
                         },
                       ),
-                    TextFormField(
-                      key: const ValueKey('role'),
-                      onSaved: (value) {
-                        _role = value!;
-                      },
-                      decoration: const InputDecoration(
-                          labelText: 'Teacher/Student/Admin'),
-                      validator: (value) {
-                        if (value!.isEmpty ||
-                            value.length == 7 ||
-                            value.length == 4) {
-                          return 'Must be Teacher or Student or Admin';
-                        }
-                        {
-                          return null;
-                        }
-                      },
-                    ),
+                    if (!_isLogin)
+                      TextFormField(
+                        key: const ValueKey('role'),
+                        onSaved: (value) {
+                          _role = value!;
+                        },
+                        decoration: const InputDecoration(
+                            labelText: 'Teacher/Student/Admin'),
+                        validator: (value) {
+                          if (value!.isEmpty || value.length == 7) {
+                            return 'Must be Teacher or Student or Admin';
+                          }
+                          {
+                            return null;
+                          }
+                        },
+                      ),
                     TextFormField(
                       key: const ValueKey('password'),
                       validator: (value) {
@@ -155,6 +167,6 @@ class _AuthFormState extends State<AuthForm> {
               ),
             )),
       ),
-   ] );
+    ]);
   }
 }

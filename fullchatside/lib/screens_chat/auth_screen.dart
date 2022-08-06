@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,11 +20,11 @@ class _AuthScreenState extends State<AuthScreen> {
   var _isLoading = false;
 
   void _submitAuthForm(
-    
     String email,
     String password,
     String username,
     String role,
+    File image,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -32,19 +35,26 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = true;
       });
       if (isLogin) {
-         authResult = await _auth.signInWithEmailAndPassword(
+        authResult = await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
       } else {
-     authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-      
+        authResult = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+//---image upload
+        final ref =
+            FirebaseStorage.instance.ref().child(authResult.user!.uid + '.jpg');
+        // ignore: await_only_futures
+        await ref.putFile(image).whenComplete;
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user!.uid)
-            .set({'username':username,'email':email, 
-       'role': role,  
-             });
+            .set({
+          'username': username,
+          'email': email,
+          'role': role,
+        });
       }
     } on PlatformException catch (err) {
       String? message = 'An error occurred, pelase check your credentials!';
@@ -74,9 +84,10 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(  bottom: false,
-      child: Scaffold(   
-        backgroundColor:  Colors.blue,
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        backgroundColor: Colors.blue,
         body: AuthForm(
           _submitAuthForm,
           _isLoading,
