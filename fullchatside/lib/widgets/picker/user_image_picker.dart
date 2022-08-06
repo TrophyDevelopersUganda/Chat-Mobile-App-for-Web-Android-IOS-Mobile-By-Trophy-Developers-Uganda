@@ -13,7 +13,9 @@ class UserImagePicker extends StatefulWidget {
 class _UserImagePickerState extends State<UserImagePicker> {
   final ImagePicker _picker = ImagePicker();
   final picker = ImagePicker();
- late File _pickedImage;
+File? _pickedImage;
+
+ // requires import 'dart:io';
   Future<void> _pickImage() async {
     final XFile? pickedImageFile =
         await _picker.pickImage(source: ImageSource.camera);
@@ -42,7 +44,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
       children: [
         CircleAvatar(
    
-         backgroundImage: _pickedImage!=null? FileImage(_pickedImage
+         backgroundImage: _pickedImage!=null? FileImage(_pickedImage!
           // !=null ? FileImage(_pickedImage): null
           ): null,
           radius: 64,
