@@ -44,8 +44,11 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Card(
+    return Stack(
+   
+  children: <Widget>[
+   
+     Card(
         color: Colors.white,
         margin: const EdgeInsets.all(2),
         child: SingleChildScrollView(
@@ -57,6 +60,7 @@ class _AuthFormState extends State<AuthForm> {
                 child: Column(
                   children: <Widget>[
                   const UserImagePicker(),
+                  
                     
                     TextFormField(
                       key: const ValueKey('email'),
@@ -151,6 +155,6 @@ class _AuthFormState extends State<AuthForm> {
               ),
             )),
       ),
-    );
+   ] );
   }
 }
