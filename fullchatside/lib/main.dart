@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fullchatside/screens_chat/auth_screen.dart';
 import 'package:fullchatside/screens_chat/chat_screen.dart';
+
 Future<void> main() async {
- 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -20,14 +20,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Akaboozi ',
       theme: ThemeData(
-     bottomAppBarColor: Colors.blueAccent
+        bottomAppBarColor: Colors.blueAccent,
         // primarySwatch: Colors.white70,
-        // scaffoldBackgroundColor: Colors.blueAccent,
-        // bottomAppBarColor: Colors.blueAccent,
+        scaffoldBackgroundColor: Colors.white,
+
         // backgroundColor: Colors.blueAccent,
       ),
-      home:StreamBuilder<User?>(
-          stream:    FirebaseAuth.instance.authStateChanges(),
+      home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {
             if (userSnapshot.hasData) {
               return const ChatScreen();

@@ -47,13 +47,17 @@ class _AuthScreenState extends State<AuthScreen> {
             FirebaseStorage.instance.ref().child(authResult.user!.uid + '.jpg');
         // ignore: await_only_futures
         await ref.putFile(image).whenComplete;
+
+        // final url = await ref.getDownloadURL();
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user!.uid)
             .set({
+          'createdAt': Timestamp.now(),
           'username': username,
           'email': email,
           'role': role,
+          // 'image_url': url,
         });
       }
     } on PlatformException catch (err) {
@@ -87,7 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return SafeArea(
       bottom: false,
       child: Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blueAccent,
         body: AuthForm(
           _submitAuthForm,
           _isLoading,
