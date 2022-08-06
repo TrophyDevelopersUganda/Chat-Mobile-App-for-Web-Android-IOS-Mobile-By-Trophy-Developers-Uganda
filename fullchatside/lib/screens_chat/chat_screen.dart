@@ -11,7 +11,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LulibApp Chat'),
+        title: const Text('Akaboozi'),
         actions: [
         DropdownButton(
           onChanged: (itemIdentifier) {

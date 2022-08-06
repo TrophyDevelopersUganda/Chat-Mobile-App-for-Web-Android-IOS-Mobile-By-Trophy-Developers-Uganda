@@ -43,5 +43,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key> NSPhotoLibraryUsageDescription </key>
+	<string>Grant Access, This feature Needs Access to your Iphone Photo Library </string>
+	<key>NSCameraUsageDescription</key>
+	<string>Grant Access, This feature Needs Access to your Iphone Camera </string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Grant Access, This feature Needs Access to your Iphone Mirophone and Camera lastly</string>
 </dict>
 </plist>

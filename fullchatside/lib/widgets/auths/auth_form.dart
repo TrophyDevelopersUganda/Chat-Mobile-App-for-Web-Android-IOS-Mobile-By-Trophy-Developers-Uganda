@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fullchatside/widgets/picker/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
@@ -55,6 +56,8 @@ class _AuthFormState extends State<AuthForm> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
+                  const UserImagePicker(),
+                    
                     TextFormField(
                       key: const ValueKey('email'),
                       validator: (value) {
@@ -89,22 +92,24 @@ class _AuthFormState extends State<AuthForm> {
                           }
                         },
                       ),
-                            TextFormField(
-                        key: const ValueKey('role'),
-                        onSaved: (value) {
-                          _role = value!;
-                        },
-                        decoration:
-                            const InputDecoration(labelText: 'Teacher/Student/Admin'),
-                        validator: (value) {
-                          if (value!.isEmpty || value.length == 7 || value.length == 4  ) {
-                            return 'Must be Teacher or Student or Admin';
-                          }
-                          {
-                            return null;
-                          }
-                        },
-                      ),
+                    TextFormField(
+                      key: const ValueKey('role'),
+                      onSaved: (value) {
+                        _role = value!;
+                      },
+                      decoration: const InputDecoration(
+                          labelText: 'Teacher/Student/Admin'),
+                      validator: (value) {
+                        if (value!.isEmpty ||
+                            value.length == 7 ||
+                            value.length == 4) {
+                          return 'Must be Teacher or Student or Admin';
+                        }
+                        {
+                          return null;
+                        }
+                      },
+                    ),
                     TextFormField(
                       key: const ValueKey('password'),
                       validator: (value) {
